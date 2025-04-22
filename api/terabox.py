@@ -10,7 +10,6 @@ async def get_terabox_info(
     url: str = Query(..., description="The Terabox share URL"),
     pwd: str = Query(None, description="Optional password for the shared file")
 ):
-    # Regex to validate Terabox URLs
     import re
     terabox_url_regex = r'^https:\/\/(terabox\.com|1024terabox\.com)\/s\/([A-Za-z0-9-_]+)$'
     match = re.match(terabox_url_regex, url)
@@ -21,7 +20,6 @@ async def get_terabox_info(
     shorturl = match.group(2)
 
     try:
-        # Step 1: Get file info
         info_url = "https://terabox.hnn.workers.dev/api/get-info"
         info_params = {'shorturl': shorturl, 'pwd': pwd}
         headers = {
@@ -55,7 +53,6 @@ async def get_terabox_info(
         create_time = int(file['create_time'])
         category = file['category']
 
-        # Step 2: Get download link
         download_url = "https://terabox.hnn.workers.dev/api/get-download"
         download_data = {
             'shareid': shareid,
@@ -76,7 +73,6 @@ async def get_terabox_info(
 
         download_link = download_data['downloadLink']
 
-        # Step 3: Respond with file details
         response_data = {
             "ok": True,
             "filename": filename,
